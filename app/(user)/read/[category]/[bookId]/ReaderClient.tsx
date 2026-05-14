@@ -1,0 +1,226 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import axiosInstance from "@/API/axiosInstance";
+import Image from "next/image";
+
+export default function ReaderClient({ bookId }: { bookId: string }) {
+  const router = useRouter();
+
+  const [book, setBook] = useState<any>(null);
+  const [relatedBooks, setRelatedBooks] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  console.log("BOOK ID:", bookId);
+
+  useEffect(() => {
+    if (!bookId) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchBook = async () => {
+      try {
+        const res = await axiosInstance.get(`/user/books/${bookId}`);
+
+        setBook(res.data.data.book);
+        setRelatedBooks(res.data.data.relatedBooks || []);
+        setErrorMsg(null);
+      } catch (err: any) {
+        const msg =
+          err?.response?.data?.message ||
+          "உள்ளடக்கம் ஏற்றுவதில் பிழை ஏற்பட்டது";
+
+        setErrorMsg(msg);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBook();
+  }, [bookId]);
+
+  /* ---------------- LOADING ---------------- */
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading content...
+      </div>
+    );
+  }
+
+  /* ---------------- PAGE ---------------- */
+  return (
+    <div className="min-h-screen bg-gray-100 px-3 py-5 md:pt-20 pt-35">
+      <div className="max-w-7xl mx-auto">
+        {/* HEADER */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900">{book?.title}</h1>
+
+          {book?.subtitle && (
+            <p className="text-lg text-gray-600 mt-2">{book.subtitle}</p>
+          )}
+
+          <div className="text-sm text-gray-500 mt-3">
+            ✍️ {book?.authorName} ·{" "}
+            {book?.publishedAt &&
+              new Date(book.publishedAt).toLocaleDateString("ta-IN", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+          </div>
+        </div>
+
+        {/* GRID */}
+        <div className="grid grid-cols-12 gap-6">
+          {/* LEFT CONTENT */}
+          <div className="col-span-12 lg:col-span-8">
+            {errorMsg || !book?.content ? (
+              <div className="bg-white rounded-xl shadow p-10 text-center">
+                <h2 className="text-xl font-semibold text-red-600 mb-3">
+                  ⚠️ உள்ளடக்கம் கிடைக்கவில்லை
+                </h2>
+
+                <p className="text-gray-600 text-sm">
+                  {errorMsg ||
+                    "இந்த புத்தகத்திற்கு உள்ளடக்கம் இன்னும் சேர்க்கப்படவில்லை"}
+                </p>
+              </div>
+            ) : (
+              <article
+                className="prose prose-lg max-w-none bg-white text-gray-900 p-8 rounded-xl shadow"
+                dangerouslySetInnerHTML={{
+                  __html: book.content,
+                }}
+              />
+            )}
+          </div>
+
+          {/* RIGHT SIDE */}
+          <div className="col-span-12 lg:col-span-4 space-y-6 sticky top-28 self-start">
+            {/* TAGS */}
+            <div className="bg-white text-black rounded-xl shadow p-6">
+              <h3 className="text-lg font-semibold mb-4">🏷️ Tags</h3>
+
+              {book?.tags?.length ? (
+                <div className="flex flex-wrap gap-2">
+                  {book.tags.map((tag: string, idx: number) => (
+                    <span
+                      key={idx}
+                      className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500 text-sm">No tags available</p>
+              )}
+            </div>
+
+            {/* RELATED */}
+            <div className="bg-white text-black  rounded-xl shadow p-6">
+              <h3 className="text-lg font-semibold mb-4">
+                📰 Related Articles
+              </h3>
+
+              {relatedBooks.length ? (
+                relatedBooks.map((rb) => (
+                  <div
+                    key={rb.id}
+                    className="flex gap-3 cursor-pointer hover:bg-gray-50 p-2 rounded-lg"
+                    onClick={() => router.push(`/read/${rb.category}/${rb.id}`)}
+                  >
+                    <Image
+                      src={rb.coverImage}
+                      alt={rb.title}
+                      width={100}
+                      height={100}
+                      className="w-16 h-20 object-cover rounded-md"
+                    />
+
+                    <div>
+                      <h4 className="text-sm font-semibold line-clamp-2">
+                        {rb.title}
+                      </h4>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500 text-sm">No related articles</p>
+              )}
+            </div>
+
+            <div className="bg-white rounded-xl shadow p-6 border border-gray-100">
+              {/* LOGO */}
+              <img
+                src="/MaanudamLogo.jpeg" // 🔁 your logo path
+                alt="Manudam Logo"
+                className="w-24 mx-auto mb-4"
+              />
+
+              {/* DESCRIPTION */}
+              <div className="text-sm text-gray-600 leading-relaxed mb-4">
+                <p>
+                  மானுடம் சமூகம், அரசியல், பண்பாடு, இலக்கிய தொடர்பான படைப்புகளை
+                  வாசகர்களுக்குக் கொண்டு சேர்க்கும் ஒரு மின்னிதழ்
+                </p>
+                <p>முதன்மை ஆசிரியர்: தங்க.செங்கதிர்</p>
+                <p>ஆசிரியர்: பி.காளிங்கன்</p>
+                <p>தொடர்புக்கு: 9384602085</p>
+              </div>
+              {/* SOCIAL ICONS */}
+              <div className="flex justify-center gap-4 text-xl text-gray-600">
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  className="hover:text-pink-600"
+                >
+                  📸
+                </a>
+                <a
+                  href="https://x.com"
+                  target="_blank"
+                  className="hover:text-black"
+                >
+                  ❌
+                </a>
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  className="hover:text-blue-600"
+                >
+                  📘
+                </a>
+                <a
+                  href="https://wa.me/91xxxxxxxxxx"
+                  target="_blank"
+                  className="hover:text-green-600"
+                >
+                  💬
+                </a>
+              </div>
+            </div>
+            <div className="bg-white rounded-xl shadow p-6 border text-black border-gray-100">
+              <h3 className="text-lg font-semibold mb-3">🔍 Search Articles</h3>
+
+              <input
+                type="text"
+                placeholder="தேடுங்கள்..."
+                className="
+        w-full px-4 py-2
+        border rounded-lg
+        focus:outline-none
+        focus:ring-2 focus:ring-blue-500
+      "
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/navbar/navbar";
+import { HomeProvider } from "./Context/HomeContext";
+import Script from "next/script";
+import PopupContainer from "@/components/PopuContainer";
+import { AuthProvider } from "./Context/AuthContext";
+import Footer from "@/components/footer/Footer";
+import MobileNavbar from "@/components/navbar/MobileNavbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +30,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ta">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Script
+          src="https://checkout.razorpay.com/v1/checkout.js"
+          strategy="beforeInteractive"
+        />
+        <AuthProvider>
+          {children}
+          <PopupContainer />
+        </AuthProvider>
       </body>
     </html>
   );

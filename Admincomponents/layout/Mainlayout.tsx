@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Sidebar from "@/Admincomponents/layout/Sidebar";
 import Header from "@/Admincomponents/layout/Header";
-import "./globals.css";
+
 
 export default function RootLayout({
   children,

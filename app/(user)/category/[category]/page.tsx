@@ -5,6 +5,8 @@ import Image from "next/image";
 import MagazineCard from "@/components/card/MagazineCard";
 import { CategoryBannerConfig } from "@/components/CategoryBannersConfig";
 import CategoryClient from "./CategoryClient";
+import { useAuth } from "@/app/Context/AuthContext";
+
 
 export type Book = {
   id: number;
@@ -36,19 +38,18 @@ const categoryApiMap: Record<CategorySlug, string> = {
   magazine: "இதழ்கள்",
 };
 
-async function getCategoryBooks(category: CategorySlug) {
-  const tamilCategory = categoryApiMap[category];
+// async function getCategoryBooks(category: CategorySlug) {
+//   const tamilCategory = categoryApiMap[category];
 
-  const res = await fetch(
-    `http://localhost:8080/api/v1/user/books/category?category=${encodeURIComponent(tamilCategory)}&status=PUBLISHED`,
-    { cache: "no-store" }
-  );
+//   const res = await fetch(
+//     `http://localhost:8080/api/v1/user/books/category?category=${encodeURIComponent(tamilCategory)}&status=PUBLISHED`,
+//   );
   
 
-  const data = await res.json();
-  console.log("this is Data",data)
-  return data?.data || [];
-}
+//   const data = await res.json();
+//   console.log("this is Data",data)
+//   return data?.data || [];
+// }
 
 
 export default async function CategoryPage({
@@ -57,12 +58,12 @@ export default async function CategoryPage({
   params: Promise<{ category: CategorySlug }>;
 }) {
      const { category } = await params;
- const books: Book[] = await getCategoryBooks(category);
+//  const books: Book[] = await getCategoryBooks(category);
 
   const tamilKey = categoryApiMap[category];
   const config = CategoryBannerConfig[tamilKey];
 
   return (
-    <CategoryClient  books={books} category={category} config = {config} tamilKey={tamilKey}/>
+    <CategoryClient  category={category} config = {config} tamilKey={tamilKey}/>
   );
 }

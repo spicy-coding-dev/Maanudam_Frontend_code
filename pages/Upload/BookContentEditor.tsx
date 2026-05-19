@@ -29,6 +29,7 @@ export default function BookContentEditor() {
   const [saving, setSaving] = useState(false);
 
   const saveTimer = useRef<any>(null);
+  const [imageLoading,setImageLoading] = useState(false)
 
   //-------------------------------------------
   // IMAGE UPLOAD
@@ -43,15 +44,18 @@ export default function BookContentEditor() {
     const formData = new FormData();
     formData.append("image", file);
 
-    const toastId = toast.loading("Uploading image...");
 
     try {
+      setImageLoading(true)
       const res = await axiosInstance.post("/admin/books/editor-image", formData);
       toast.success("Image added ✅", { position:"top-right" });
 
       return res.data?.data.url;
     } catch {
       toast.error("Upload failed ❌", { position:"top-right" });
+    }
+    finally{
+      setImageLoading(false)
     }
   };
 
@@ -314,7 +318,7 @@ export default function BookContentEditor() {
           />
 
           <ToolbarBtn
-            label="Image"
+            label={imageLoading? "Uploading...": "Image"}
             onClick={() => {
               const input = document.createElement("input");
               input.type = "file";

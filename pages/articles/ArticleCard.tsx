@@ -122,12 +122,22 @@ export default function ArticleCard({
           />
         </div>
 
+<div className="flex justify-between items-center">
+
+
         {book.magazineNo && (
-          <span className="inline-block text-[10px] font-semibold px-2 py-1 rounded bg-blue-100 text-blue-700">
+          <span className="text-[10px] font-semibold px-2 py-1 rounded bg-blue-100 text-blue-700">
             இதழ் #{book.magazineNo}
           </span>
         )}
-
+        {
+          book.id &&(
+            <span className="text-[10px] font-semibold px-2 py-1 rounded bg-blue-100 text-blue-700">
+              ID NO : {book.id}
+            </span>
+          )
+        }
+</div>
         <h3 className="text-sm font-bold text-gray-900 line-clamp-2">
           {book.title}
         </h3>

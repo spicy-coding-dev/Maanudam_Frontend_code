@@ -5,15 +5,50 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Book } from "./page";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function CategoryClient({
-  books,
+  // books,
   category,
   config,
   tamilKey,
 }: any) {
-  console.log(books)
+
+
+const [books, setBooks] = useState([]);
+
+useEffect(() => {
+  const fetchBooks = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+
+      const res = await fetch(
+        `http://localhost:8080/api/v1/user/books/category?category=${encodeURIComponent(
+          tamilKey
+        )}&status=PUBLISHED`,
+        {
+         headers: token
+  ? {
+      Authorization: `Bearer ${token}`,
+    }
+  : {},
+        }
+      );
+
+      const data = await res.json();
+      console.log("This is data",data)
+      setBooks(data.data || []);
+    } catch (error) {
+      console.log("Fetch Error", error);
+    }
+  };
+
+  fetchBooks();
+}, [tamilKey]);
+
+
   console.log("this is category", category);
+  console.log("THis is book" , books)
   const latestBooks = books.filter(
     (books: Book) => books.issueType === "LATEST",
   );

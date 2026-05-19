@@ -77,10 +77,21 @@ const LoginForm: React.FC = () => {
       console.log(response);
       const token = response.data?.data?.accessToken;
       const role = response.data?.data?.userRole;
+      
+      console.log(token)
       // ✅ AuthContext login
-      if (token) {
-        login(token);
-      }
+      // ✅ Save role
+if (role) {
+  localStorage.setItem("ROLE", role);
+}
+
+// ✅ Login
+if (token) {
+  login(token);
+}
+      // if (token) {
+      //   login(token);
+      // }
 
       setLoginAttempts(0);
 
@@ -98,8 +109,11 @@ const LoginForm: React.FC = () => {
           router.push("/");
         }
       }, 1000);
-    } catch (err) {
-      console.error("this is  err", err);
+    } catch (err:any) {
+     toast.error(err.response?.data?.message,{
+      position:"top-right"
+     })
+      console.error("this is  err", err.response.data.message);
       setLoginAttempts((prev) => prev + 1);
     } finally {
       setLoading(false);

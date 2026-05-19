@@ -34,7 +34,7 @@ const SubscriptionPage = () => {
 
   return (
     <div className="font-sans bg-white min-h-screen pb-[50px] w-full">
-      <header className="bg-[#ff523b] text-white p-[30px_60px_40px] md:p-[20px_15px_30px] text-center relative w-full flex flex-col items-center justify-center">
+      <header className="bg-[#ff523b] text-white p-[30px_60px_40px]  mt-20 md:mt-0 md:p-[20px_15px_30px] text-center relative w-full flex flex-col items-center justify-center">
         <h1 className="m-0 text-[32px] md:text-[24px] md:px-[30px] font-extrabold tracking-[0.5px] leading-[1.2]">
           சந்தா திட்டங்கள்
         </h1>

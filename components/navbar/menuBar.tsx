@@ -22,7 +22,7 @@ export default function MenuBar() {
   const router = useRouter();
 
   return (
-    <div className="sticky top-0 z-50 bg-black p-5 hidden md:block shadow-[#d4af37] shadow-sm">
+    <div className="sticky top-0 z-50 bg-black p-5 hidden lg:block shadow-[#d4af37] shadow-sm">
       <div className=" flex items-center justify-between px-4 gap-6">
         <Link href="/">
           <Image

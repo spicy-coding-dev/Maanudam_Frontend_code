@@ -41,6 +41,7 @@ export default function ArticleCategoryPage() {
   } | null>(null);
 
   useEffect(() => {
+    console.log("fetch called");
     fetchBooks();
   }, [category, status]);
 
@@ -56,11 +57,12 @@ export default function ArticleCategoryPage() {
           status,
         },
       });
-
+      console.log("this is response",res)
       setBooks(res.data?.data || []);
       setMessage("இந்த நிலையில் கட்டுரைகள் இல்லை");
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
+      console.log(err.response)
       setBooks([]);
       setMessage(
         err?.response?.data?.message || "கட்டுரைகளை ஏற்ற முடியவில்லை",

@@ -24,7 +24,7 @@ export default function MobileNavbar() {
   return (
     <>
       {/* MOBILE TOP BAR */}
-      <header className="fixed top-0 left-0 w-full bg-white z-50 md:hidden">
+      <header className="fixed top-0 left-0 w-full bg-white z-50 lg:hidden">
         <div className="flex items-center justify-between h-20 px-4 py-3 shadow-sm">
 
           {/* Search */}

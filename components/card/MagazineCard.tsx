@@ -85,13 +85,17 @@ const MagazineCard = ({ item }: Props) => {
             <span className="text-red-600 font-bold text-sm">
               ₹ {item.price}
             </span>
-
-            <RazorpayButton
+          {
+            !item.accessible && (
+               <RazorpayButton
               amount={item.price}
               purpose="MAGAZINE_PURCHASE"
               paymentType="SINGLE_BOOK"
               planId={item.planId}
             />
+            )
+          }
+           
           </div>
         )}
       </div>

@@ -68,11 +68,20 @@ axiosInstance.interceptors.response.use(
       status !== 403
     ) {
       toast.error(String(backendMessage), {
-        position: "top-right",
-      });
+  position: "top-right",
+  toastId: backendMessage,
+});
     }
+    //Check login
+    const isAuthRoute =
+      originalRequest.url?.includes("/auth/user-login") ||
+      originalRequest.url?.includes("/auth/refresh");
 
-    if ((status === 401 || status === 403) && !originalRequest._retry) {
+    if (
+      (status === 401 || status === 403) &&
+      !originalRequest._retry &&
+      !isAuthRoute
+    ) {
       originalRequest._retry = true;
 
       try {
@@ -83,11 +92,7 @@ axiosInstance.interceptors.response.use(
           };
         }
 
-        const res = await axiosInstance.post<RefreshResponse>(
-          `/auth/refresh`,
-          {},
-          { withCredentials: true },
-        );
+        const res = await axiosInstance.post<RefreshResponse>(`/auth/refresh`);
 
         const newToken = res.data.data.accessToken;
 

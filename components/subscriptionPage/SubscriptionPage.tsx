@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "@/API/axiosInstance";
 import PricingCard from "./PricingCard";
 import { PLAN_FEATURES } from "@/Data/PlanFeatures";
+import Link from "next/link";
 
 const SubscriptionPage = () => {
   const [priceDetails, setPriceDetails] = useState<{
@@ -44,7 +45,7 @@ const SubscriptionPage = () => {
       </header>
 
       <h2 className="text-center text-[24px] font-extrabold m-[40px_0_20px] text-[#1a1a1a]">
-        அச்சு இதழ் சந்தா
+        அச்சு இதழ் சந்தா  <span><Link href={"/address"} className="text-[14px]">(upload delivery address)</Link></span>
       </h2>
 
       <div

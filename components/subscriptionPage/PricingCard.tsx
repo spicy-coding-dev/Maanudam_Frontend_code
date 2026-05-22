@@ -63,6 +63,7 @@ const PricingCard = ({
         paymentType="SUBSCRIPTION"
         planId={planId}
         disabled={!isSelected}
+         requiresAddress={purpose === "PRINT_SUBSCRIPTION"}
       />
     </div>
   );

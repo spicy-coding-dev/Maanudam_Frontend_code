@@ -3,6 +3,7 @@
 import axiosInstance from "@/API/axiosInstance";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 type Props = {
   amount: number;
@@ -11,14 +12,16 @@ type Props = {
   planId?: number;
   bookId?: number;
   addressId?: number;
-  disabled?:boolean
+  disabled?:boolean;
+   // ✅ new prop
+  requiresAddress?: boolean;
 };
 
 export default function RazorpayButton(props: Props) {
 
     const [showAddressPopup, setShowAddressPopup] = useState(false);
     const role = localStorage.getItem("role")
-
+  const router = useRouter();
   const [address, setAddress] = useState({
     name: "",
     mobile: "",
@@ -99,12 +102,12 @@ export default function RazorpayButton(props: Props) {
     } catch (err: any) {
       console.log("this is admin err",err.response.data.message)
    
-         const errorMessage =
-      err?.response?.data?.message || "Payment Failed";
+    //      const errorMessage =
+    //   err?.response?.data?.message || "Payment Failed";
 
-    toast.info(errorMessage, {
-      position: "top-right",
-    });
+    // toast.info(errorMessage, {
+    //   position: "top-right",
+    // });
       
     
     }
@@ -131,8 +134,21 @@ export default function RazorpayButton(props: Props) {
     {props.amount > 0 && (
       <button
         onClick={() => {
-          handlePayment();
-        }}
+
+    // ✅ Print subscription
+    if (props.requiresAddress) {
+
+      router.push(
+        `/address?planId=${props.planId}&amount=${props.amount}`
+      );
+
+      return;
+    }
+
+    // ✅ Direct payment
+    handlePayment();
+
+  }}
         className={`text-white px-6 py-2 rounded cursor-pointer ${
           props.disabled ? "bg-gray-400" : "bg-blue-600"
         }`}

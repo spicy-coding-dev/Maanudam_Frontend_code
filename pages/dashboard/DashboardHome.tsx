@@ -20,7 +20,7 @@ export default function DashboardHome() {
   const { user } = useAuth();
 
   const { stats, loading } = useAdminDashboardStats();
-
+console.log(stats)
   if (loading) {
     return <p className="text-gray-500">Loading dashboard...</p>;
   }
@@ -76,14 +76,14 @@ export default function DashboardHome() {
 
         <StatCard
           title="செயலில் சந்தா"
-          value={5}
+          value={stats.activeSubscriptionUsers}
           icon={FiCreditCard}
           color="green"
         />
 
         <StatCard
           title="இந்த மாத வருமானம்"
-          value={48500}
+          value={stats.currentMonthRevenue}
           icon={FiDollarSign}
           color="green"
         />

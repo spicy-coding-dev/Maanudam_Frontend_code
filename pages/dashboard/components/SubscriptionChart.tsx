@@ -11,12 +11,13 @@ import {
 } from "recharts";
 import axiosInstance from "@/API/axiosInstance";
 
-const COLORS = ["#22c55e", "#3b82f6", "#f97316"]; // green, blue, orange
+const COLORS = ["#22c55e", "#3b82f6", "#f97316", "#ef4444"]; // green, blue, orange
 
 type SummaryResponse = {
   paidUsers: number;
   freeUsers: number;
   expiringSoon: number;
+  expiredUsers: number;
 };
 
 export default function SubscriptionChart() {
@@ -36,14 +37,15 @@ export default function SubscriptionChart() {
       const res = await axiosInstance.get(
         "/admin/dashboard/subs/summary"
       );
-
-      const summary: SummaryResponse = res.data;
+      console.log("this is testing",res)
+      const summary: SummaryResponse = res.data?.data;
 
       // 🔥 PieChart format
       setData([
-        { name: "Paid Users", value: summary.paidUsers },
+        { name: "Active Users", value: summary.paidUsers },
         { name: "Free Users", value: summary.freeUsers },
         { name: "Expiring Soon", value: summary.expiringSoon },
+        {name:"Expired Users",value:summary.expiredUsers}
       ]);
     } catch (err) {
       console.error("Failed to load subscription summary", err);

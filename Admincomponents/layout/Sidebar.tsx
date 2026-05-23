@@ -109,6 +109,11 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
           { label: "உள்ளடக்கம் பதிவேற்றம்", to: "/admin/upload/content" },
         ]}
       />
+      <SidebarLink 
+      href="/admin/payment-history"
+      icon = {<FiCreditCard/>}
+      text="பணம் செலுத்தல்"
+      />
 
       <SidebarLink href="/settings" icon={<FiSettings />} text="அமைப்புகள்" />
     </aside>

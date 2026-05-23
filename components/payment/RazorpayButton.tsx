@@ -4,6 +4,7 @@ import axiosInstance from "@/API/axiosInstance";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { CircularProgress } from "@mui/material";
 
 type Props = {
   amount: number;
@@ -19,22 +20,16 @@ type Props = {
 
 export default function RazorpayButton(props: Props) {
 
-    const [showAddressPopup, setShowAddressPopup] = useState(false);
-    const role = localStorage.getItem("role")
+  const [loading,setLoading] = useState(false)
   const router = useRouter();
-  const [address, setAddress] = useState({
-    name: "",
-    mobile: "",
-    address: "",
-    city: "",
-    pincode: "",
-  });
+
 
 
 
   const handlePayment = async (savedAddressId?: number) => {
     console.log("PLAN ID:", props.planId);
     try {
+      setLoading(true)
       // 1️⃣ PRE-CHECK API CALL
       const preCheckRes = await axiosInstance.post(
         "/payments/pre-check/subscription",
@@ -101,31 +96,9 @@ export default function RazorpayButton(props: Props) {
       rzp.open();
     } catch (err: any) {
       console.log("this is admin err",err.response.data.message)
-   
-    //      const errorMessage =
-    //   err?.response?.data?.message || "Payment Failed";
-
-    // toast.info(errorMessage, {
-    //   position: "top-right",
-    // });
-      
-    
     }
-  };
-
-  // 🔥 ADDRESS SAVE
-  const saveAddressAndPay = async () => {
-    try {
-      const res = await axiosInstance.post("/address/create", address);
-
-      const savedAddressId = res.data.data.id;
-
-      setShowAddressPopup(false);
-
-      // payment continue
-      handlePayment(savedAddressId);
-    } catch (err) {
-      console.log(err);
+    finally{
+      setLoading(false)
     }
   };
 
@@ -154,7 +127,7 @@ export default function RazorpayButton(props: Props) {
         }`}
         disabled={props.disabled}
       >
-        Pay ₹{props.amount}
+       {loading?(<CircularProgress size={20} color="inherit" />) : `Pay ₹ ${props.amount}`} 
       </button>
     )}
   </>)

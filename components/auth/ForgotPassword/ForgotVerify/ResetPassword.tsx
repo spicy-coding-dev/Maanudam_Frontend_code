@@ -65,12 +65,16 @@ const ResetPassword: React.FC = () => {
         token,
       });
 
-      toast.success(res.data.message);
+      toast.success(res.data.message,{
+        position:"top-right"
+      });
 
       setSuccess(true);
       reset();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Something went wrong");
+      toast.error(err?.response?.data?.message || "Something went wrong",{
+        position:"top-right"
+      });
     } finally {
       setLoading(false);
     }
@@ -105,7 +109,7 @@ const ResetPassword: React.FC = () => {
               height={120}
               className="object-contain"
             />
-            <p>கடவுச்சொல்லை மாற்றவும்</p>
+            <p className="text-gray-700">கடவுச்சொல்லை மாற்றவும்</p>
           </div>
 
           {/* New Password */}
@@ -143,7 +147,7 @@ const ResetPassword: React.FC = () => {
             type="submit"
             disabled={loading}
             className="w-full mt-5 py-3 rounded-lg bg-yellow-400 text-black font-semibold
-              flex items-center justify-center gap-2 hover:bg-yellow-600"
+              flex items-center justify-center gap-2 hover:bg-yellow-600 cursor-pointer"
           >
             {loading ? (
               <CircularProgress size={24} color="inherit" />

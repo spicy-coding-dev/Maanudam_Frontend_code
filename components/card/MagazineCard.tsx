@@ -5,6 +5,7 @@ import { Lock } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import RazorpayButton from "../payment/RazorpayButton";
+import { toast } from "react-toastify";
 
 
 
@@ -26,7 +27,12 @@ const MagazineCard = ({ item }: Props) => {
   const handleCardClick = () => {
     console.log("ITEM:", item);
     if (!item.accessible) {
-      alert("🔒 இந்த இதழை படிக்க சந்தா செலுத்துங்கள்");
+      toast.info("🔒 இந்த இதழை படிக்க சந்தா செலுத்துங்கள்",{
+        position:"top-right"
+      })
+     setTimeout(() => {
+        router.push("/plan-subscription")
+      }, 2000);
       return;
     }
 

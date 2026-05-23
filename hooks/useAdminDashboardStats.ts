@@ -11,6 +11,8 @@ export type DashboardStats = {
   totalUsers: number;
   pendingUsers: number;
   booksUploadedThisMonth: number;
+  activeSubscriptionUsers:number;
+  currentMonthRevenue:number;
 };
 
 export const useAdminDashboardStats = () => {
